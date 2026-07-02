@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Srunington — Бадминтонный клуб</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --burgundy: #6B1D2E;
+            --burgundy-dark: #4A1420;
+            --burgundy-light: #800020;
+            --gold: #D4AF37;
+            --gold-light: #F4D03F;
+            --gold-dark: #B8941F;
+            --light-bg-1: #F5F5F5;
+            --light-bg-2: #E0E0E0;
+            --text-dark: #2C2C2C;
+            --text-light: #FFFFFF;
+            --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.4);
+            --shadow-burgundy: 0 8px 30px rgba(107, 29, 46, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(180deg, var(--light-bg-1) 0%, var(--light-bg-2) 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           ШАПКА
+           ============================================ */
+        .header {
+            background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .emblem {
+            width: 75px;
+            height: 75px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+        }
+
+        .emblem:hover { transform: rotate(5deg) scale(1.08); }
+
+        .club-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.3);
+            text-align: center;
+            flex: 1;
+        }
+
+        .burger-menu {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 35px;
+            height: 25px;
+            cursor: pointer;
+            padding: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .burger-menu:hover { transform: scale(1.1); }
+
+        .burger-menu span {
+            display: block;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active span:nth-child(1) { transform: translateY(11px) rotate(45deg); }
+        .burger-menu.active span:nth-child(2) { opacity: 0; }
+        .burger-menu.active span:nth-child(3) { transform: translateY(-11px) rotate(-45deg); }
+
+        /* ============================================
+           ОСНОВНОЙ КОНТЕНТ
+           ============================================ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: calc(100vh - 200px);
+        }
+
+        .page { display: none; animation: fadeIn 0.6s ease; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ovals-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .oval {
+            background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+            border-radius: 50% / 40%;
+            padding: 50px 80px;
+            text-align: center;
+            box-shadow: var(--shadow-burgundy), inset 0 0 30px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--gold);
+            position: relative;
+            max-width: 700px;
+            width: 100%;
+            animation: ovalAppear 1s ease;
+        }
+
+        @keyframes ovalAppear {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .oval::before {
+            content: '';
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 1px solid var(--gold);
+            border-radius: 50% / 40%;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .oval-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .match-date {
+            color: var(--text-light);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .match-time {
+            color: var(--gold-light);
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+
+        /* ============================================
+           ЗВЁЗДОЧКА MVP В ЛОББИ
+           ============================================ */
+        .mvp-lobby-badge {
+            display: none;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(192, 57, 43, 0.2));
+            border: 2px solid var(--gold);
+            border-radius: 30px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .mvp-lobby-badge.show { display: inline-flex; }
+
+        .mvp-star {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: starPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes starPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.5)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 1)); }
+        }
+
+        .mvp-star svg { width: 40px; height: 40px; }
+
+        .mvp-star-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--burgundy);
+            font-weight: 900;
+            font-size: 0.9rem;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .mvp-lobby-text {
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+        }
+
+        .mvp-lobby-name {
+            background: linear-gradient(90deg, #c0392b, #D4AF37, #c0392b, #D4AF37);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: mvpShine 3s linear infinite;
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        @keyframes mvpShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        /* ============================================
+           КНОПКИ В ОВАЛАХ
+           ============================================ */
+        .register-btn, .mvp-btn {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            box-shadow: var(--shadow-gold);
+            margin: 5px;
+        }
+
+        .register-btn:hover, .mvp-btn:hover {
+            background: var(--gold);
+            color: var(--burgundy);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
+        }
+
+        .mvp-btn {
+            background: linear-gradient(135deg, rgba(192, 57, 43, 0.3), rgba(212, 175, 55, 0.3));
+            border-color: var(--gold-light);
+        }
+
+        .mvp-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .admin-edit-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 20px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .admin-edit-btn:hover {
+            background: var(--gold);
+            color: var(--burgundy);
+        }
+
+        .admin-badge {
+            position: fixed;
+            top: 110px;
+            right: 20px;
+            background: var(--gold);
+            color: var(--burgundy);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: var(--shadow-gold);
+            z-index: 50;
+            display: none;
+        }
+
+        .admin-badge.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ============================================
+           САЙДБАР
+           ============================================ */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 350px;
+            max-width: 90%;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+            transition: right 0.4s ease;
+            z-index: 200;
+            padding: 80px 30px 30px;
+            border-left: 3px solid var(--gold);
+        }
+
+        .sidebar.open { right: 0; }
+
+        .sidebar-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--gold);
+            padding-bottom: 15px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            color: var(--gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .menu-item:hover {
+            background: var(--gold);
+            color: var(--burgundy);
+            transform: translateX(-5px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .menu-item i { font-size: 1.3rem; width: 25px; text-align: center; }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 150;
+        }
+
+        .overlay.show { opacity: 1; visibility: visible; }
+
+        /* ============================================
+           МОДАЛЬНЫЕ ОКНА
+           ============================================ */
+        .modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 300;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show { display: flex; }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--light-bg-1) 0%, var(--light-bg-2) 100%);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid var(--gold);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            animation: modalAppear 0.4s ease;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalAppear {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--burgundy);
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            background: white;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--burgundy);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--burgundy);
+            color: var(--gold);
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .modal-btn:hover {
+            background: var(--gold);
+            color: var(--burgundy);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--burgundy);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .modal-close:hover { transform: rotate(90deg); color: var(--gold); }
+
+        .error-msg { color: #c0392b; text-align: center; margin-top: 10px; font-weight: 600; display: none; }
+        .success-msg { color: #27ae60; text-align: center; margin-top: 10px; font-weight: 600; display: none; }
+
+        .admin-info {
+            background: rgba(212, 175, 55, 0.15);
+            border-left: 4px solid var(--gold);
+            padding: 12px 15px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .admin-info i { color: var(--gold-dark); margin-right: 5px; }
+
+        .codes-counter {
+            text-align: center;
+            color: var(--burgundy);
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* ============================================
+           ВЫБОР АВАТАРКИ
+           ============================================ */
+        .avatar-picker {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .avatar-option {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            background: var(--light-bg-1);
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+            border-color: var(--gold);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--burgundy);
+            box-shadow: 0 0 15px rgba(107, 29, 46, 0.5);
+            transform: scale(1.1);
+        }
+
+        /* ============================================
+           СТРАНИЦА ЧАТА
+           ============================================ */
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--gold);
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .chat-header h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--burgundy);
+            letter-spacing: 2px;
+        }
+
+        .chat-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, rgba(107, 29, 46, 0.05), rgba(212, 175, 55, 0.1));
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--gold);
+        }
+
+        .chat-user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--light-bg-1);
+            border: 2px solid var(--gold);
+            flex-shrink: 0;
+        }
+
+        .chat-user-details { flex: 1; }
+
+        .chat-user-name {
+            font-weight: 700;
+            color: var(--burgundy);
+            font-size: 1rem;
+        }
+
+        .chat-user-actions { display: flex; gap: 8px; }
+
+        .chat-user-actions button {
+            background: transparent;
+            border: 1px solid var(--burgundy);
+            color: var(--burgundy);
+            padding: 5px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .chat-user-actions button:hover {
+            background: var(--burgundy);
+            color: var(--gold);
+        }
+
+        .chat-notice {
+            background: rgba(212, 175, 55, 0.15);
+            border-left: 4px solid var(--gold);
+            padding: 12px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+            background: var(--light-bg-1);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            min-height: 200px;
+        }
+
+        /* ============================================
+           СООБЩЕНИЯ С АВАТАРКАМИ
+           ============================================ */
+        .chat-message {
+            background: white;
+            padding: 12px 18px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--burgundy);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            animation: messageAppear 0.3s ease;
+            position: relative;
+            transition: background 0.2s ease;
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-message:hover { background: #fafafa; }
+
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .chat-message.admin {
+            border-left-color: var(--gold);
+            background: rgba(212, 175, 55, 0.08);
+        }
+
+        .chat-message.admin:hover { background: rgba(212, 175, 55, 0.15); }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            background: var(--light-bg-1);
+            border: 2px solid var(--gold);
+            flex-shrink: 0;
+        }
+
+        .message-content { flex: 1; min-width: 0; }
+
+        .message-reply {
+            background: rgba(107, 29, 46, 0.08);
+            border-left: 3px solid var(--gold);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .message-reply:hover { background: rgba(107, 29, 46, 0.15); }
+
+        .message-reply-author {
+            color: var(--burgundy);
+            font-weight: 700;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .message-reply-author i { font-size: 0.75rem; color: var(--gold); }
+
+        .message-reply-text {
+            color: var(--text-dark);
+            opacity: 0.85;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100%;
+        }
+
+        .message-reply.deleted { opacity: 0.5; font-style: italic; }
+
+        .message-author {
+            font-weight: 700;
+            color: var(--burgundy);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-message.admin .message-author { color: var(--gold-dark); }
+
+        .message-author.mvp-name {
+            background: linear-gradient(90deg, #c0392b, #D4AF37, #c0392b, #D4AF37);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: mvpShine 3s linear infinite;
+            font-weight: 900;
+        }
+
+        .mvp-crown {
+            color: var(--gold);
+            animation: crownBounce 2s ease-in-out infinite;
+            -webkit-text-fill-color: initial;
+        }
+
+        @keyframes crownBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-2px); }
+        }
+
+        .message-text {
+            color: var(--text-dark);
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .message-time { font-size: 0.75rem; color: #888; }
+
+        .message-edited {
+            font-size: 0.7rem;
+            color: #999;
+            font-style: italic;
+            margin-left: 5px;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 5px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .chat-message:hover .message-actions { opacity: 1; }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #888;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--gold);
+            color: var(--burgundy);
+            border-color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .action-btn.delete:hover {
+            background: #c0392b;
+            color: white;
+            border-color: #c0392b;
+        }
+
+        @media (hover: none) {
+            .message-actions { opacity: 1; }
+        }
+
+        .reply-preview, .edit-preview {
+            display: none;
+            background: linear-gradient(135deg, rgba(107, 29, 46, 0.08), rgba(212, 175, 55, 0.1));
+            border: 1px solid var(--gold);
+            border-left: 4px solid var(--gold);
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            position: relative;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reply-preview.show, .edit-preview.show { display: block; }
+
+        .reply-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .reply-preview-label, .edit-preview-label {
+            color: var(--burgundy);
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .reply-preview-label i, .edit-preview-label i { color: var(--gold); }
+
+        .reply-preview-close {
+            background: transparent;
+            border: none;
+            color: var(--burgundy);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 2px 6px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .reply-preview-close:hover { background: var(--burgundy); color: var(--gold); }
+
+        .reply-preview-text {
+            color: var(--text-dark);
+            font-size: 0.85rem;
+            opacity: 0.8;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .chat-input-container { display: flex; gap: 10px; }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid var(--gold);
+            border-radius: 25px;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .chat-input:focus { outline: none; border-color: var(--burgundy); }
+
+        .chat-send-btn {
+            background: var(--burgundy);
+            color: var(--gold);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .chat-send-btn:hover { background: var(--gold); color: var(--burgundy); }
+
+        /* ============================================
+           СТРАНИЦА ОПЛАТЫ
+           ============================================ */
+        .payment-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--gold);
+            text-align: center;
+        }
+
+        .payment-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--burgundy);
+            font-size: 2rem;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .payment-info {
+            background: linear-gradient(135deg, rgba(107, 29, 46, 0.05), rgba(212, 175, 55, 0.1));
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid var(--gold);
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--gold);
+        }
+
+        .payment-row:last-child { border-bottom: none; }
+
+        .payment-label { font-weight: 600; color: var(--burgundy); letter-spacing: 1px; }
+        .payment-value { font-weight: 700; color: var(--text-dark); font-size: 1.1rem; }
+        .payment-amount { font-size: 2rem; color: var(--burgundy); font-weight: 900; }
+
+        .pay-btn {
+            background: var(--burgundy);
+            color: var(--gold);
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            box-shadow: var(--shadow-burgundy);
+            margin-top: 15px;
+        }
+
+        .pay-btn:hover {
+            background: var(--gold);
+            color: var(--burgundy);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 2px solid var(--burgundy);
+            color: var(--burgundy);
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        .back-btn:hover { background: var(--burgundy); color: var(--gold); }
+
+        .registration-success { display: none; text-align: center; padding: 30px; }
+        .registration-success.show { display: block; animation: fadeIn 0.5s ease; }
+
+        .success-icon {
+            width: 100px; height: 100px;
+            background: #27ae60;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 3rem;
+            box-shadow: 0 5px 20px rgba(39, 174, 96, 0.4);
+            animation: successPop 0.5s ease;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            font-family: 'Playfair Display', serif;
+            color: #27ae60;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        /* ============================================
+           MVP СПИСОК ИГРОКОВ
+           ============================================ */
+        .mvp-player-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .mvp-player-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mvp-player-item:hover {
+            border-color: var(--gold);
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .mvp-player-item.selected {
+            border-color: var(--burgundy);
+            background: linear-gradient(135deg, rgba(107, 29, 46, 0.1), rgba(212, 175, 55, 0.15));
+        }
+
+        .mvp-player-avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            background: var(--light-bg-1);
+            border: 2px solid var(--gold);
+            flex-shrink: 0;
+        }
+
+        .mvp-player-name {
+            flex: 1;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .mvp-player-votes {
+            background: var(--burgundy);
+            color: var(--gold);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .mvp-voting-status {
+            background: rgba(212, 175, 55, 0.15);
+            border-left: 4px solid var(--gold);
+            padding: 12px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .mvp-voting-status.closed {
+            border-left-color: #c0392b;
+            background: rgba(192, 57, 43, 0.1);
+        }
+
+        .mvp-timer {
+            font-weight: 700;
+            color: var(--burgundy);
+        }
+
+        /* ============================================
+           ФУТЕР
+           ============================================ */
+        .footer {
+            background: linear-gradient(135deg, var(--burgundy-dark) 0%, var(--burgundy) 100%);
+            color: var(--gold);
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            border-top: 2px solid var(--gold);
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        /* ============================================
+           АДАПТИВНОСТЬ
+           ============================================ */
+        @media (max-width: 768px) {
+            .header { padding: 12px 15px; }
+            .club-name { font-size: 1.4rem; letter-spacing: 2px; }
+            .emblem { width: 55px; height: 55px; }
+            .burger-menu { width: 28px; height: 20px; }
+            .main-content { padding: 20px 15px; }
+            .oval { padding: 35px 25px; border-radius: 50% / 30%; }
+            .match-date { font-size: 1.3rem; }
+            .match-time { font-size: 1rem; }
+            .register-btn, .mvp-btn { padding: 12px 25px; font-size: 0.9rem; }
+            .payment-container, .chat-container { padding: 20px; }
+            .payment-title { font-size: 1.5rem; }
+            .payment-amount { font-size: 1.5rem; }
+            .chat-input-container { flex-direction: column; }
+            .admin-badge { top: 90px; font-size: 0.7rem; padding: 5px 10px; }
+            .chat-message { padding: 10px 12px; }
+            .action-btn { width: 32px; height: 32px; }
+            .avatar-picker { grid-template-columns: repeat(4, 1fr); }
+            .mvp-lobby-badge { flex-direction: column; padding: 15px; }
+        }
+
+        @media (max-width: 480px) {
+            .club-name { font-size: 1.1rem; }
+            .oval-title { font-size: 0.9rem; }
+            .match-date { font-size: 1.1rem; }
+            .message-footer { flex-direction: column; align-items: flex-start; }
+            .message-actions { align-self: flex-end; }
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--light-bg-2); }
+        ::-webkit-scrollbar-thumb { background: var(--burgundy); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <svg class="emblem" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="49" fill="#4A1420"/>
+            <circle cx="50" cy="50" r="48" fill="none" stroke="#D4AF37" stroke-width="0.8"/>
+            <circle cx="50" cy="50" r="46.5" fill="none" stroke="#D4AF37" stroke-width="0.3"/>
+            <circle cx="50" cy="50" r="45" fill="#6B1D2E"/>
+            <g fill="#D4AF37">
+                <path d="M 50 4 L 50.7 6 L 52.8 6 L 51.1 7.2 L 51.8 9.3 L 50 8 L 48.2 9.3 L 48.9 7.2 L 47.2 6 L 49.3 6 Z"/>
+                <path d="M 50 4 L 50.7 6 L 52.8 6 L 51.1 7.2 L 51.8 9.3 L 50 8 L 48.2 9.3 L 48.9 7.2 L 47.2 6 L 49.3 6 Z" transform="rotate(45 50 50)"/>
+                <path d="M 50 4 L 50.7 6 L 52.8 6 L 51.1 7.2 L 51.8 9.3 L 50 8 L 48.2 9.3 L 48.9 7.2 L 47.2 6 L 49.3 6 Z" transform="rotate(90 50 50)"/>
+                <path d="M 50 4 L 50.7 6 L 52.8 6 L 51.1 7.2 L 51.8 9.3 L 50 8 L 48.2 9.3 L 48.9 7.2 L 47.2 6 L 49.3 6 Z" transform="rotate(135 50 50)"/>
+                <path d="M 50 4 L 50.7 6 L 52.8 6 L 51.1 7.2 L 51.8 9.3 L 50 8 L 48.2 9.3 L 48.9 7.2 L 47.2 6 L 49.3 6 Z" transform="rotate(180 50 50)"/>
+                <path d="M 50 4 L 50.7 6 L 52.8 6 L 51.1 7.2 L 51.8 9.3 L 50 8 L 48.2 9.3 L 48.9 7.2 L 47.2 6 L 49.3 6 Z" transform="rotate(225 50 50)"/>
+                <path d="M 50 4 L 50.7 6 L 52.8 6 L 51.1 7.2 L 51.8 9.3 L 50 8 L 48.2 9.3 L 48.9 7.2 L 47.2 6 L 49.3 6 Z" transform="rotate(270 50 50)"/>
+                <path d="M 50 4 L 50.7 6 L 52.8 6 L 51.1 7.2 L 51.8 9.3 L 50 8 L 48.2 9.3 L 48.9 7.2 L 47.2 6 L 49.3 6 Z" transform="rotate(315 50 50)"/>
+            </g>
+            <ellipse cx="50" cy="80" rx="38" ry="7" fill="#27ae60"/>
+            <path d="M 12 80 Q 50 74 88 80 L 88 87 Q 50 92 12 87 Z" fill="#229954"/>
+            <g stroke="#1e8449" stroke-width="0.4" stroke-linecap="round">
+                <line x1="20" y1="82" x2="20" y2="79"/><line x1="25" y1="83" x2="25" y2="80"/>
+                <line x1="32" y1="82" x2="32" y2="79"/><line x1="40" y1="83" x2="40" y2="80"/>
+                <line x1="60" y1="83" x2="60" y2="80"/><line x1="68" y1="82" x2="68" y2="79"/>
+                <line x1="75" y1="83" x2="75" y2="80"/><line x1="80" y1="82" x2="80" y2="79"/>
+            </g>
+            <g transform="translate(32, 26) rotate(-30)">
+                <rect x="-1.8" y="11" width="3.6" height="9" fill="#D4AF37"/>
+                <line x1="-1.8" y1="13" x2="1.8" y2="13" stroke="#B8941F" stroke-width="0.4"/>
+                <line x1="-1.8" y1="15" x2="1.8" y2="15" stroke="#B8941F" stroke-width="0.4"/>
+                <line x1="-1.8" y1="17" x2="1.8" y2="17" stroke="#B8941F" stroke-width="0.4"/>
+                <rect x="-2.3" y="19" width="4.6" height="1.5" fill="#B8941F" rx="0.5"/>
+                <ellipse cx="0" cy="0" rx="7.5" ry="10.5" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+                <line x1="-6.5" y1="-7" x2="6.5" y2="-7" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-7.2" y1="-4.5" x2="7.2" y2="-4.5" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-7.5" y1="-2" x2="7.5" y2="-2" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-7.5" y1="0" x2="7.5" y2="0" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-7.5" y1="2" x2="7.5" y2="2" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-7.2" y1="4.5" x2="7.2" y2="4.5" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-6.5" y1="7" x2="6.5" y2="7" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-5" y1="-9.5" x2="-5" y2="9.5" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-2.5" y1="-10.3" x2="-2.5" y2="10.3" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="0" y1="-10.5" x2="0" y2="10.5" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="2.5" y1="-10.3" x2="2.5" y2="10.3" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="5" y1="-9.5" x2="5" y2="9.5" stroke="#D4AF37" stroke-width="0.3"/>
+            </g>
+            <g transform="translate(68, 26) rotate(30)">
+                <rect x="-1.8" y="11" width="3.6" height="9" fill="#D4AF37"/>
+                <line x1="-1.8" y1="13" x2="1.8" y2="13" stroke="#B8941F" stroke-width="0.4"/>
+                <line x1="-1.8" y1="15" x2="1.8" y2="15" stroke="#B8941F" stroke-width="0.4"/>
+                <line x1="-1.8" y1="17" x2="1.8" y2="17" stroke="#B8941F" stroke-width="0.4"/>
+                <rect x="-2.3" y="19" width="4.6" height="1.5" fill="#B8941F" rx="0.5"/>
+                <ellipse cx="0" cy="0" rx="7.5" ry="10.5" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+                <line x1="-6.5" y1="-7" x2="6.5" y2="-7" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-7.2" y1="-4.5" x2="7.2" y2="-4.5" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-7.5" y1="-2" x2="7.5" y2="-2" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-7.5" y1="0" x2="7.5" y2="0" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-7.5" y1="2" x2="7.5" y2="2" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-7.2" y1="4.5" x2="7.2" y2="4.5" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-6.5" y1="7" x2="6.5" y2="7" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-5" y1="-9.5" x2="-5" y2="9.5" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="-2.5" y1="-10.3" x2="-2.5" y2="10.3" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="0" y1="-10.5" x2="0" y2="10.5" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="2.5" y1="-10.3" x2="2.5" y2="10.3" stroke="#D4AF37" stroke-width="0.3"/>
+                <line x1="5" y1="-9.5" x2="5" y2="9.5" stroke="#D4AF37" stroke-width="0.3"/>
+            </g>
+            <path d="M 35 60 Q 33 55 37 52 L 62 52 Q 67 54 67 59 L 67 64 Q 62 67 50 67 Q 38 67 35 64 Z" fill="#D4AF37"/>
+            <path d="M 37 52 Q 35 56 37 60" stroke="#B8941F" stroke-width="0.3" fill="none"/>
+            <path d="M 40 52 Q 37 46 39 41 L 46 41 Q 45 47 46 52 Z" fill="#D4AF37"/>
+            <ellipse cx="39" cy="39" rx="6.5" ry="4.5" fill="#D4AF37"/>
+            <path d="M 33 39 Q 30 40 31 42.5 Q 33 44 36 42 Z" fill="#D4AF37"/>
+            <circle cx="31.5" cy="41.5" r="0.5" fill="#6B1D2E"/>
+            <path d="M 42 36 L 43.5 32 L 44.5 36 Z" fill="#D4AF37"/>
+            <path d="M 38 36 L 36.5 32 L 35.5 36 Z" fill="#D4AF37"/>
+            <path d="M 42.5 35.5 L 43.5 33 L 44 35.5 Z" fill="#B8941F"/>
+            <path d="M 37.5 35.5 L 36.5 33 L 36 35.5 Z" fill="#B8941F"/>
+            <g stroke="#D4AF37" stroke-width="1.2" fill="none" stroke-linecap="round">
+                <path d="M 39 35 Q 36 28 32 24"/><path d="M 37 31 L 33 29"/>
+                <path d="M 35 27 L 31 26"/><path d="M 33 25 L 30 23"/>
+            </g>
+            <g stroke="#D4AF37" stroke-width="1.2" fill="none" stroke-linecap="round">
+                <path d="M 42 35 Q 45 28 49 24"/><path d="M 44 31 L 48 29"/>
+                <path d="M 46 27 L 50 26"/><path d="M 48 25 L 51 23"/>
+            </g>
+            <path d="M 40 65 L 39 70 L 38.5 75 L 40.5 75 L 41 70 L 42 65 Z" fill="#D4AF37"/>
+            <path d="M 45 65 L 44 70 L 43.5 75 L 45.5 75 L 46 70 L 47 65 Z" fill="#D4AF37"/>
+            <path d="M 56 65 L 55 70 L 54.5 75 L 56.5 75 L 57 70 L 58 65 Z" fill="#D4AF37"/>
+            <path d="M 61 65 L 60 70 L 59.5 75 L 61.5 75 L 62 70 L 63 65 Z" fill="#D4AF37"/>
+            <rect x="38" y="74.5" width="3" height="1.5" fill="#8B6914" rx="0.3"/>
+            <rect x="43" y="74.5" width="3" height="1.5" fill="#8B6914" rx="0.3"/>
+            <rect x="54" y="74.5" width="3" height="1.5" fill="#8B6914" rx="0.3"/>
+            <rect x="59" y="74.5" width="3" height="1.5" fill="#8B6914" rx="0.3"/>
+            <path d="M 66 57 Q 70 55 71 58 Q 70 61 67 60 Q 66 59 66 57 Z" fill="#D4AF37"/>
+            <circle cx="36" cy="38" r="1" fill="#6B1D2E"/>
+            <circle cx="36.3" cy="37.7" r="0.3" fill="#FFFFFF"/>
+            <ellipse cx="50" cy="77" rx="20" ry="1.5" fill="#000000" opacity="0.2"/>
+        </svg>
+
+        <h1 class="club-name">SRUNINGTON</h1>
+
+        <div class="burger-menu" id="burgerMenu" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <div class="admin-badge" id="adminBadge">
+        <i class="fas fa-crown"></i> АДМИН
+    </div>
+
+    <aside class="sidebar" id="sidebar">
+        <h2 class="sidebar-title">МЕНЮ</h2>
+        <div class="menu-item" onclick="openAdminModal()">
+            <i class="fas fa-user-shield"></i><span>Получить администратора</span>
+        </div>
+        <div class="menu-item" onclick="showPage('chatPage'); closeSidebar();">
+            <i class="fas fa-comments"></i><span>Войти в мессенджер</span>
+        </div>
+        <div class="menu-item" onclick="closeSidebar()">
+            <i class="fas fa-times-circle"></i><span>Закрыть каталог</span>
+        </div>
+    </aside>
+
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <main class="main-content">
+        
+        <section class="page active" id="homePage">
+            <div class="ovals-container">
+                
+                <div class="oval">
+                    <div class="oval-title">Следующий матч</div>
+                    <div class="match-date" id="matchDate">15 ИЮНЯ 2026</div>
+                    <div class="match-time" id="matchTime">19:30</div>
+                    
+                    <div class="mvp-lobby-badge" id="mvpLobbyBadge">
+                        <div class="mvp-star">
+                            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 25 3 L 31 18 L 47 19 L 34 30 L 38 46 L 25 37 L 12 46 L 16 30 L 3 19 L 19 18 Z" 
+                                      fill="#D4AF37" stroke="#B8941F" stroke-width="1"/>
+                            </svg>
+                            <span class="mvp-star-number" id="mvpStarNumber">1</span>
+                        </div>
+                        <div>
+                            <div class="mvp-lobby-text">MVP КЛУБА</div>
+                            <div class="mvp-lobby-name" id="mvpLobbyName">—</div>
+                        </div>
+                    </div>
+                    
+                    <button class="admin-edit-btn" id="adminEditBtn" style="display: none;" onclick="openDateModal()">
+                        <i class="fas fa-edit"></i> Изменить дату
+                    </button>
+                </div>
+
+                <div class="oval">
+                    <div class="oval-title">Участие в игре</div>
+                    <button class="register-btn" onclick="showPage('paymentPage')">
+                        <i class="fas fa-ticket-alt"></i> ЗАРЕГИСТРИРОВАТЬСЯ НА ИГРУ
+                    </button>
+                </div>
+
+                <div class="oval">
+                    <div class="oval-title">Лучший игрок</div>
+                    <button class="mvp-btn" id="mvpButton" onclick="openMvpModal()">
+                        <i class="fas fa-trophy"></i> ВЫБРАТЬ MVP ИГРЫ
+                    </button>
+                    <div id="mvpStatusText" style="color: var(--gold-light); margin-top: 15px; font-size: 0.9rem;"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="page" id="chatPage">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <i class="fas fa-comments" style="font-size: 2rem; color: var(--burgundy);"></i>
+                    <h2>Мессенджер клуба</h2>
+                </div>
+                
+                <div id="chatUserInfo" style="display: none;">
+                    <div class="chat-user-info">
+                        <div class="chat-user-avatar" id="chatUserAvatar">👤</div>
+                        <div class="chat-user-details">
+                            <div class="chat-user-name" id="chatUserNameDisplay">—</div>
+                            <div style="font-size: 0.75rem; color: #888;">Вы вошли в чат</div>
+                        </div>
+                        <div class="chat-user-actions">
+                            <button onclick="openAvatarPicker()"><i class="fas fa-image"></i> Аватар</button>
+                            <button onclick="changeUserName()"><i class="fas fa-edit"></i> Имя</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-notice">
+                    <i class="fas fa-info-circle"></i> 
+                    Наведите на сообщение, чтобы ответить, отредактировать или удалить его.
+                </div>
+
+                <div id="chatNameSetup">
+                    <h3 style="color: var(--burgundy); margin-bottom: 15px; text-align: center;">
+                        <i class="fas fa-user-plus"></i> Представьтесь
+                    </h3>
+                    <input type="text" class="modal-input" id="chatUserName" placeholder="Ваше имя..." maxlength="20">
+                    <p style="text-align: center; color: var(--text-dark); margin-bottom: 15px; font-weight: 600;">
+                        Выберите аватар:
+                    </p>
+                    <div class="avatar-picker" id="avatarPickerSetup"></div>
+                    <button class="modal-btn" onclick="setChatName()">Начать общение</button>
+                </div>
+
+                <div class="chat-messages" id="chatMessages"></div>
+
+                <div class="reply-preview" id="replyPreview">
+                    <div class="reply-preview-header">
+                        <div class="reply-preview-label">
+                            <i class="fas fa-reply"></i>
+                            <span>Ответ <strong id="replyPreviewAuthor"></strong></span>
+                        </div>
+                        <button class="reply-preview-close" onclick="cancelReply()" title="Отменить ответ">×</button>
+                    </div>
+                    <div class="reply-preview-text" id="replyPreviewText"></div>
+                </div>
+
+                <div class="edit-preview" id="editPreview">
+                    <div class="reply-preview-header">
+                        <div class="edit-preview-label">
+                            <i class="fas fa-edit"></i>
+                            <span>Редактирование сообщения</span>
+                        </div>
+                        <button class="reply-preview-close" onclick="cancelEdit()" title="Отменить редактирование">×</button>
+                    </div>
+                </div>
+
+                <div class="chat-input-container" id="chatInputContainer" style="display: none;">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Напишите сообщение..." maxlength="500" onkeypress="if(event.key==='Enter')sendMessage()">
+                    <button class="chat-send-btn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+
+                <button class="back-btn" onclick="showPage('homePage')" style="margin-top: 20px;">
+                    <i class="fas fa-arrow-left"></i> На главную
+                </button>
+            </div>
+        </section>
+
+        <section class="page" id="paymentPage">
+            <div class="payment-container">
+                <div id="paymentForm">
+                    <h2 class="payment-title">
+                        <i class="fas fa-shuttlecock" style="color: var(--gold);"></i>
+                        Регистрация на матч
+                    </h2>
+                    <div class="payment-info">
+                        <div class="payment-row">
+                            <span class="payment-label">Назначение:</span>
+                            <span class="payment-value">Аренда зала</span>
+                        </div>
+                        <div class="payment-row">
+                            <span class="payment-label">Сумма:</span>
+                            <span class="payment-value payment-amount">300 ₽</span>
+                        </div>
+                        <div class="payment-row">
+                            <span class="payment-label">Телефон для перевода:</span>
+                            <span class="payment-value">+7 (999) 123-45-67</span>
+                        </div>
+                        <div class="payment-row">
+                            <span class="payment-label">Получатель:</span>
+                            <span class="payment-value">Администратор клуба</span>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-dark); margin-bottom: 20px; line-height: 1.6;">
+                        После перевода нажмите кнопку ниже. Администратор подтвердит вашу регистрацию в течение 24 часов.
+                    </p>
+                    <button class="pay-btn" onclick="confirmPayment()">
+                        <i class="fas fa-check-circle"></i> Я ОПЛАТИЛ
+                    </button>
+                    <br>
+                    <button class="back-btn" onclick="showPage('homePage')">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                </div>
+
+                <div class="registration-success" id="registrationSuccess">
+                    <div class="success-icon"><i class="fas fa-check"></i></div>
+                    <h2 class="success-title">Вы зарегистрированы на матч!</h2>
+                    <p style="color: var(--text-dark); margin-bottom: 20px; line-height: 1.6;">
+                        Ваша оплата принята. Ждём вас на игре!<br>
+                        Не забудьте взять с собой спортивную форму и хорошее настроение.
+                    </p>
+                    <button class="back-btn" onclick="showPage('homePage')">
+                        <i class="fas fa-home"></i> На главную
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">© 2026 Srunington. Все права защищены.</footer>
+
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('adminModal')">×</button>
+            <h3 class="modal-title">Вход для администратора</h3>
+            <div class="admin-info">
+                <i class="fas fa-shield-alt"></i>
+                <strong>Важно:</strong> Каждый код — одноразовый. После использования он становится недействительным.
+            </div>
+            <input type="password" class="modal-input" id="adminCodeInput" placeholder="Введите код (SRUN-XXXX)" onkeypress="if(event.key==='Enter')checkAdminCode()">
+            <button class="modal-btn" onclick="checkAdminCode()">
+                <i class="fas fa-key"></i> Активировать код
+            </button>
+            <p class="error-msg" id="adminError"><i class="fas fa-exclamation-triangle"></i> <span id="adminErrorText">Неверный код!</span></p>
+            <p class="success-msg" id="adminSuccess"><i class="fas fa-check-circle"></i> Добро пожаловать, администратор!</p>
+            <div class="codes-counter" id="codesCounter"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="dateModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('dateModal')">×</button>
+            <h3 class="modal-title">Изменить дату матча</h3>
+            <label style="display: block; margin-bottom: 10px; color: var(--burgundy); font-weight: 600;">Дата:</label>
+            <input type="date" class="modal-input" id="newMatchDate">
+            <label style="display: block; margin-bottom: 10px; color: var(--burgundy); font-weight: 600;">Время:</label>
+            <input type="time" class="modal-input" id="newMatchTime">
+            <button class="modal-btn" onclick="saveMatchDate()">
+                <i class="fas fa-save"></i> Сохранить
+            </button>
+        </div>
+    </div>
+
+    <div class="modal" id="avatarModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('avatarModal')">×</button>
+            <h3 class="modal-title">Выберите аватар</h3>
+            <div class="avatar-picker" id="avatarPickerModal"></div>
+            <button class="modal-btn" onclick="saveAvatar()">
+                <i class="fas fa-save"></i> Сохранить
+            </button>
+        </div>
+    </div>
+
+    <div class="modal" id="mvpModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('mvpModal')">×</button>
+            <h3 class="modal-title"><i class="fas fa-trophy" style="color: var(--gold);"></i> MVP Игры</h3>
+            
+            <div class="mvp-voting-status" id="mvpVotingStatus"></div>
+
+            <div id="mvpVotingContent">
+                <p style="text-align: center; color: var(--text-dark); margin-bottom: 15px; font-weight: 600;">
+                    Выберите лучшего игрока матча:
+                </p>
+                <div class="mvp-player-list" id="mvpPlayerList"></div>
+                <button class="modal-btn" onclick="submitMvpVote()" id="mvpSubmitBtn">
+                    <i class="fas fa-check"></i> Проголосовать
+                </button>
+            </div>
+
+            <div id="mvpAlreadyVoted" style="display: none;">
+                <p style="text-align: center; color: var(--burgundy); font-weight: 700; margin-bottom: 15px;">
+                    <i class="fas fa-check-circle"></i> Вы уже проголосовали
+                </p>
+                <div style="background: rgba(212, 175, 55, 0.15); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid var(--gold);">
+                    <p style="color: var(--text-dark); margin-bottom: 8px;">Ваш голос:</p>
+                    <p style="color: var(--burgundy); font-weight: 900; font-size: 1.3rem;" id="mvpYourVote">—</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ============================================
+           КОНСТАНТЫ
+           ============================================ */
+        const INITIAL_ADMIN_CODES = [
+            'SRUN-7A3K', 'SRUN-9M2P', 'SRUN-4B8N', 'SRUN-6T1Q', 'SRUN-2R5W',
+            'SRUN-8H4J', 'SRUN-3V7L', 'SRUN-5C9X', 'SRUN-1D6Y', 'SRUN-0F2Z',
+            'SRUN-K8M3', 'SRUN-P4N7', 'SRUN-Q9R2', 'SRUN-W5T6', 'SRUN-X1B8'
+        ];
+        
+        const AVAILABLE_AVATARS = [
+            '🦊', '🐺', '🦁', '🐯', '🐻', '🐼', '🦝', '🐸',
+            '🦅', '🦉', '🐲', '🐙', '🦄', '🐝', '🦋', '🐢'
+        ];
+        
+        const STORAGE_KEYS = {
+            isAdmin: 'srunington_isAdmin',
+            matchDate: 'srunington_matchDate',
+            matchTime: 'srunington_matchTime',
+            chatMessages: 'srunington_chatMessages',
+            chatUserName: 'srunington_chatUserName',
+            chatUserAvatar: 'srunington_chatUserAvatar',
+            isRegistered: 'srunington_isRegistered',
+            activeCodes: 'srunington_activeCodes',
+            usedCodes: 'srunington_usedCodes',
+            registeredPlayers: 'srunington_registeredPlayers',
+            mvpVoting: 'srunington_mvpVoting',
+            mvpHistory: 'srunington_mvpHistory',
+            currentMvp: 'srunington_currentMvp'
+        };
+
+        /* ============================================
+           УНИВЕРСАЛЬНАЯ ФУНКЦИЯ СОЗДАНИЯ ДАТЫ
+           Работает во всех браузерах (включая Safari)
+           ============================================ */
+        function safeDate(dateStr, timeStr) {
+            try {
+                const [year, month, day] = dateStr.split('-').map(Number);
+                const [hours, minutes] = timeStr.split(':').map(Number);
+                return new Date(year, month - 1, day, hours, minutes, 0);
+            } catch (e) {
+                console.error('Ошибка создания даты:', e);
+                return new Date();
+            }
+        }
+
+        /* ============================================
+           СОСТОЯНИЕ
+           ============================================ */
+        let chatActionState = null;
+        let selectedAvatarForSetup = null;
+        let selectedAvatarForChange = null;
+        let selectedMvpPlayer = null;
+
+        /* ============================================
+           ИНИЦИАЛИЗАЦИЯ
+           ============================================ */
+        function initCodesSystem() {
+            if (!localStorage.getItem(STORAGE_KEYS.activeCodes)) {
+                localStorage.setItem(STORAGE_KEYS.activeCodes, JSON.stringify(INITIAL_ADMIN_CODES));
+                localStorage.setItem(STORAGE_KEYS.usedCodes, JSON.stringify([]));
+            }
+        }
+
+        function initMvpSystem() {
+            if (!localStorage.getItem(STORAGE_KEYS.mvpHistory)) {
+                localStorage.setItem(STORAGE_KEYS.mvpHistory, JSON.stringify([]));
+            }
+            if (!localStorage.getItem(STORAGE_KEYS.registeredPlayers)) {
+                localStorage.setItem(STORAGE_KEYS.registeredPlayers, JSON.stringify([]));
+            }
+        }
+
+        function generateMessageId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        }
+
+        function migrateMessages() {
+            const messages = JSON.parse(localStorage.getItem(STORAGE_KEYS.chatMessages) || '[]');
+            let needsSave = false;
+            messages.forEach(msg => {
+                if (!msg.id) { msg.id = generateMessageId(); needsSave = true; }
+            });
+            if (needsSave) localStorage.setItem(STORAGE_KEYS.chatMessages, JSON.stringify(messages));
+            return messages;
+        }
+
+        /* ============================================
+           ЗАГРУЗКА СТРАНИЦЫ (с защитой от ошибок)
+           ============================================ */
+        window.addEventListener('DOMContentLoaded', () => {
+            try {
+                initCodesSystem();
+                initMvpSystem();
+                migrateMessages();
+                
+                checkAdminStatus();
+                loadMatchDate();
+                loadChatMessages();
+                checkRegistrationStatus();
+                checkChatUserName();
+                renderAvatarPickerSetup();
+                updateMvpButtonState();
+                updateMvpLobbyBadge();
+                
+                console.log('%c🏸 Srunington Badminton Club', 'color: #D4AF37; font-size: 20px; font-weight: bold;');
+            } catch (error) {
+                console.error('❌ Ошибка инициализации:', error);
+                alert('Произошла ошибка при загрузке сайта. Попробуйте обновить страницу.');
+            }
+        });
+
+        /* ============================================
+           НАВИГАЦИЯ
+           ============================================ */
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+            document.getElementById('burgerMenu').classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('burgerMenu').classList.remove('active');
+        }
+
+        function openModal(modalId) { document.getElementById(modalId).classList.add('show'); }
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+            document.getElementById('adminError').style.display = 'none';
+            document.getElementById('adminSuccess').style.display = 'none';
+            document.getElementById('adminCodeInput').value = '';
+            document.getElementById('codesCounter').textContent = '';
+        }
+
+        function openAdminModal() {
+            if (localStorage.getItem(STORAGE_KEYS.isAdmin) === 'true') {
+                alert('Вы уже являетесь администратором!');
+                closeSidebar();
+                return;
+            }
+            closeSidebar();
+            openModal('adminModal');
+            updateCodesCounter();
+        }
+
+        function openDateModal() {
+            document.getElementById('newMatchDate').value = localStorage.getItem(STORAGE_KEYS.matchDate) || '2026-06-15';
+            document.getElementById('newMatchTime').value = localStorage.getItem(STORAGE_KEYS.matchTime) || '19:30';
+            openModal('dateModal');
+        }
+
+        /* ============================================
+           АДМИН
+           ============================================ */
+        function checkAdminCode() {
+            const inputCode = document.getElementById('adminCodeInput').value.trim().toUpperCase();
+            if (!inputCode) { showError('Введите код!'); return; }
+            
+            let activeCodes = JSON.parse(localStorage.getItem(STORAGE_KEYS.activeCodes) || '[]');
+            let usedCodes = JSON.parse(localStorage.getItem(STORAGE_KEYS.usedCodes) || '[]');
+            
+            if (activeCodes.includes(inputCode)) {
+                activeCodes = activeCodes.filter(c => c !== inputCode);
+                usedCodes.push(inputCode);
+                localStorage.setItem(STORAGE_KEYS.activeCodes, JSON.stringify(activeCodes));
+                localStorage.setItem(STORAGE_KEYS.usedCodes, JSON.stringify(usedCodes));
+                localStorage.setItem(STORAGE_KEYS.isAdmin, 'true');
+                
+                document.getElementById('adminError').style.display = 'none';
+                document.getElementById('adminSuccess').style.display = 'block';
+                document.getElementById('codesCounter').innerHTML = 
+                    `<i class="fas fa-key"></i> Осталось: <strong>${activeCodes.length}</strong> из ${INITIAL_ADMIN_CODES.length}`;
+                
+                setTimeout(() => { closeModal('adminModal'); checkAdminStatus(); }, 2000);
+            } else if (usedCodes.includes(inputCode)) {
+                showError('Этот код уже был использован.');
+            } else {
+                showError('Неверный код.');
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('adminErrorText').textContent = message;
+            document.getElementById('adminError').style.display = 'block';
+            document.getElementById('adminSuccess').style.display = 'none';
+        }
+
+        function updateCodesCounter() {
+            const activeCodes = JSON.parse(localStorage.getItem(STORAGE_KEYS.activeCodes) || '[]');
+            document.getElementById('codesCounter').innerHTML = 
+                `<i class="fas fa-key"></i> Доступно: <strong>${activeCodes.length}</strong> из ${INITIAL_ADMIN_CODES.length}`;
+        }
+
+        function checkAdminStatus() {
+            const isAdmin = localStorage.getItem(STORAGE_KEYS.isAdmin) === 'true';
+            document.getElementById('adminBadge').classList.toggle('show', isAdmin);
+            document.getElementById('adminEditBtn').style.display = isAdmin ? 'inline-block' : 'none';
+        }
+
+        /* ============================================
+           ДАТА МАТЧА
+           ============================================ */
+        function saveMatchDate() {
+            const newDate = document.getElementById('newMatchDate').value;
+            const newTime = document.getElementById('newMatchTime').value;
+            if (!newDate || !newTime) { alert('Заполните оба поля!'); return; }
+            
+            localStorage.setItem(STORAGE_KEYS.matchDate, newDate);
+            localStorage.setItem(STORAGE_KEYS.matchTime, newTime);
+            
+            loadMatchDate();
+            closeModal('dateModal');
+            updateMvpButtonState();
+            alert('Дата и время обновлены!');
+        }
+
+        function loadMatchDate() {
+            try {
+                const dateStr = localStorage.getItem(STORAGE_KEYS.matchDate) || '2026-06-15';
+                const timeStr = localStorage.getItem(STORAGE_KEYS.matchTime) || '19:30';
+                const date = new Date(dateStr);
+                
+                // Проверка на валидную дату
+                if (isNaN(date.getTime())) {
+                    document.getElementById('matchDate').textContent = '15 ИЮНЯ 2026';
+                    document.getElementById('matchTime').textContent = '19:30';
+                    return;
+                }
+                
+                const months = ['ЯНВАРЯ', 'ФЕВРАЛЯ', 'МАРТА', 'АПРЕЛЯ', 'МАЯ', 'ИЮНЯ',
+                               'ИЮЛЯ', 'АВГУСТА', 'СЕНТЯБРЯ', 'ОКТЯБРЯ', 'НОЯБРЯ', 'ДЕКАБРЯ'];
+                document.getElementById('matchDate').textContent = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+                document.getElementById('matchTime').textContent = timeStr;
+            } catch (error) {
+                console.error('Ошибка загрузки даты:', error);
+                document.getElementById('matchDate').textContent = '15 ИЮНЯ 2026';
+                document.getElementById('matchTime').textContent = '19:30';
+            }
+        }
+
+        /* ============================================
+           РЕГИСТРАЦИЯ
+           ============================================ */
+        function confirmPayment() {
+            localStorage.setItem(STORAGE_KEYS.isRegistered, 'true');
+            
+            const userName = localStorage.getItem(STORAGE_KEYS.chatUserName);
+            if (userName) {
+                let players = JSON.parse(localStorage.getItem(STORAGE_KEYS.registeredPlayers) || '[]');
+                if (!players.includes(userName)) {
+                    players.push(userName);
+                    localStorage.setItem(STORAGE_KEYS.registeredPlayers, JSON.stringify(players));
+                }
+            }
+            
+            localStorage.setItem('srunington_registrationData', JSON.stringify({
+                date: new Date().toISOString(),
+                status: 'confirmed'
+            }));
+            
+            document.getElementById('paymentForm').style.display = 'none';
+            document.getElementById('registrationSuccess').classList.add('show');
+        }
+
+        function checkRegistrationStatus() {
+            if (localStorage.getItem(STORAGE_KEYS.isRegistered) === 'true') {
+                document.getElementById('paymentForm').style.display = 'none';
+                document.getElementById('registrationSuccess').classList.add('show');
+            }
+        }
+
+        /* ============================================
+           АВАТАРКИ
+           ============================================ */
+        function renderAvatarPickerSetup() {
+            const container = document.getElementById('avatarPickerSetup');
+            container.innerHTML = AVAILABLE_AVATARS.map(emoji => 
+                `<div class="avatar-option" data-avatar="${emoji}" onclick="selectAvatarSetup('${emoji}')">${emoji}</div>`
+            ).join('');
+        }
+
+        function selectAvatarSetup(emoji) {
+            selectedAvatarForSetup = emoji;
+            document.querySelectorAll('#avatarPickerSetup .avatar-option').forEach(el => {
+                el.classList.toggle('selected', el.dataset.avatar === emoji);
+            });
+        }
+
+        function openAvatarPicker() {
+            selectedAvatarForChange = localStorage.getItem(STORAGE_KEYS.chatUserAvatar) || '👤';
+            const container = document.getElementById('avatarPickerModal');
+            container.innerHTML = AVAILABLE_AVATARS.map(emoji => 
+                `<div class="avatar-option ${emoji === selectedAvatarForChange ? 'selected' : ''}" 
+                      data-avatar="${emoji}" 
+                      onclick="selectAvatarChange('${emoji}')">${emoji}</div>`
+            ).join('');
+            openModal('avatarModal');
+        }
+
+        function selectAvatarChange(emoji) {
+            selectedAvatarForChange = emoji;
+            document.querySelectorAll('#avatarPickerModal .avatar-option').forEach(el => {
+                el.classList.toggle('selected', el.dataset.avatar === emoji);
+            });
+        }
+
+        function saveAvatar() {
+            if (!selectedAvatarForChange) { alert('Выберите аватар!'); return; }
+            localStorage.setItem(STORAGE_KEYS.chatUserAvatar, selectedAvatarForChange);
+            updateChatUserInfo();
+            closeModal('avatarModal');
+        }
+
+        function changeUserName() {
+            const newName = prompt('Введите новое имя:', localStorage.getItem(STORAGE_KEYS.chatUserName) || '');
+            if (newName && newName.trim().length >= 2) {
+                localStorage.setItem(STORAGE_KEYS.chatUserName, newName.trim());
+                updateChatUserInfo();
+                loadChatMessages();
+            }
+        }
+
+        function updateChatUserInfo() {
+            const name = localStorage.getItem(STORAGE_KEYS.chatUserName);
+            const avatar = localStorage.getItem(STORAGE_KEYS.chatUserAvatar) || '👤';
+            if (name) {
+                document.getElementById('chatUserInfo').style.display = 'block';
+                document.getElementById('chatUserAvatar').textContent = avatar;
+                document.getElementById('chatUserNameDisplay').textContent = name;
+            }
+        }
+
+        /* ============================================
+           ЧАТ: ИМЯ ПОЛЬЗОВАТЕЛЯ
+           ============================================ */
+        function setChatName() {
+            const nameInput = document.getElementById('chatUserName');
+            const name = nameInput.value.trim();
+            
+            if (name.length < 2) { alert('Имя должно содержать минимум 2 символа!'); return; }
+            if (!selectedAvatarForSetup) { alert('Выберите аватар!'); return; }
+            
+            localStorage.setItem(STORAGE_KEYS.chatUserName, name);
+            localStorage.setItem(STORAGE_KEYS.chatUserAvatar, selectedAvatarForSetup);
+            
+            document.getElementById('chatNameSetup').style.display = 'none';
+            document.getElementById('chatInputContainer').style.display = 'flex';
+            updateChatUserInfo();
+            scrollChatToBottom();
+        }
+
+        function checkChatUserName() {
+            const savedName = localStorage.getItem(STORAGE_KEYS.chatUserName);
+            if (savedName) {
+                document.getElementById('chatNameSetup').style.display = 'none';
+                document.getElementById('chatInputContainer').style.display = 'flex';
+                updateChatUserInfo();
+            }
+        }
+
+        /* ============================================
+           MVP: ЛОГИКА ГОЛОСОВАНИЯ
+           ============================================ */
+        
+        function getVotingState() {
+            try {
+                const matchDateStr = localStorage.getItem(STORAGE_KEYS.matchDate) || '2026-06-15';
+                const matchTimeStr = localStorage.getItem(STORAGE_KEYS.matchTime) || '19:30';
+                // Используем безопасную функцию создания даты
+                const matchDateTime = safeDate(matchDateStr, matchTimeStr);
+                const now = new Date();
+                const deadline = new Date(matchDateTime.getTime() + 24 * 60 * 60 * 1000);
+                
+                if (now < matchDateTime) return { state: 'future', deadline: matchDateTime };
+                if (now > deadline) return { state: 'closed', deadline: deadline };
+                return { state: 'active', deadline: deadline, matchStart: matchDateTime };
+            } catch (error) {
+                console.error('Ошибка в getVotingState:', error);
+                return { state: 'closed', deadline: new Date() };
+            }
+        }
+
+        function updateMvpButtonState() {
+            try {
+                const votingState = getVotingState();
+                const button = document.getElementById('mvpButton');
+                const statusText = document.getElementById('mvpStatusText');
+                
+                if (votingState.state === 'future') {
+                    button.disabled = true;
+                    statusText.innerHTML = `<i class="fas fa-clock"></i> Голосование откроется после начала матча`;
+                } else if (votingState.state === 'active') {
+                    button.disabled = false;
+                    const diff = votingState.deadline - new Date();
+                    const hours = Math.floor(diff / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    statusText.innerHTML = `<i class="fas fa-fire" style="color: #c0392b;"></i> Голосование открыто! Осталось: <strong>${hours}ч ${minutes}мин</strong>`;
+                } else {
+                    button.disabled = true;
+                    statusText.innerHTML = `<i class="fas fa-lock"></i> Голосование закрыто`;
+                }
+            } catch (error) {
+                console.error('Ошибка в updateMvpButtonState:', error);
+            }
+        }
+
+        function openMvpModal() {
+            try {
+                const votingState = getVotingState();
+                const statusDiv = document.getElementById('mvpVotingStatus');
+                const votingContent = document.getElementById('mvpVotingContent');
+                const alreadyVoted = document.getElementById('mvpAlreadyVoted');
+                
+                if (votingState.state === 'future') {
+                    statusDiv.className = 'mvp-voting-status closed';
+                    statusDiv.innerHTML = `<i class="fas fa-hourglass-start"></i> Голосование откроется после начала матча.<br>Дата матча: <strong>${document.getElementById('matchDate').textContent}, ${document.getElementById('matchTime').textContent}</strong>`;
+                    votingContent.style.display = 'none';
+                    alreadyVoted.style.display = 'none';
+                    openModal('mvpModal');
+                    return;
+                }
+                
+                if (votingState.state === 'closed') {
+                    const currentMvp = JSON.parse(localStorage.getItem(STORAGE_KEYS.currentMvp) || 'null');
+                    if (currentMvp) {
+                        statusDiv.className = 'mvp-voting-status';
+                        statusDiv.innerHTML = `<i class="fas fa-trophy"></i> MVP последнего матча: <strong style="color: var(--burgundy);">${escapeHtml(currentMvp.player)}</strong><br>Серия побед: <strong>${currentMvp.streak}</strong>`;
+                    } else {
+                        statusDiv.className = 'mvp-voting-status closed';
+                        statusDiv.innerHTML = `<i class="fas fa-lock"></i> Голосование закрыто. MVP не определён.`;
+                    }
+                    votingContent.style.display = 'none';
+                    alreadyVoted.style.display = 'none';
+                    openModal('mvpModal');
+                    return;
+                }
+                
+                const userName = localStorage.getItem(STORAGE_KEYS.chatUserName);
+                const votingData = JSON.parse(localStorage.getItem(STORAGE_KEYS.mvpVoting) || 'null');
+                
+                if (votingData && votingData.votedBy && userName && votingData.votedBy.includes(userName)) {
+                    statusDiv.className = 'mvp-voting-status';
+                    const diff = votingState.deadline - new Date();
+                    const hours = Math.floor(diff / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    statusDiv.innerHTML = `<i class="fas fa-clock"></i> До конца голосования: <span class="mvp-timer">${hours}ч ${minutes}мин</span>`;
+                    votingContent.style.display = 'none';
+                    alreadyVoted.style.display = 'block';
+                    document.getElementById('mvpYourVote').textContent = votingData.userVotes[userName] || '—';
+                    openModal('mvpModal');
+                    return;
+                }
+                
+                statusDiv.className = 'mvp-voting-status';
+                const diff = votingState.deadline - new Date();
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                statusDiv.innerHTML = `<i class="fas fa-clock"></i> До конца голосования: <span class="mvp-timer">${hours}ч ${minutes}мин</span>`;
+                
+                votingContent.style.display = 'block';
+                alreadyVoted.style.display = 'none';
+                
+                const players = JSON.parse(localStorage.getItem(STORAGE_KEYS.registeredPlayers) || '[]');
+                const votes = votingData ? votingData.votes : {};
+                
+                const playerList = document.getElementById('mvpPlayerList');
+                if (players.length === 0) {
+                    playerList.innerHTML = `<p style="text-align: center; color: #888; padding: 20px;">Пока никто не зарегистрировался на матч</p>`;
+                    document.getElementById('mvpSubmitBtn').style.display = 'none';
+                } else {
+                    const sortedPlayers = [...players].sort((a, b) => (votes[b] || 0) - (votes[a] || 0));
+                    
+                    playerList.innerHTML = sortedPlayers.map(player => {
+                        let avatar = '👤';
+                        if (player === localStorage.getItem(STORAGE_KEYS.chatUserName)) {
+                            avatar = localStorage.getItem(STORAGE_KEYS.chatUserAvatar) || '👤';
+                        }
+                        const voteCount = votes[player] || 0;
+                        return `
+                            <div class="mvp-player-item" data-player="${escapeHtml(player)}" onclick="selectMvpPlayer(this, '${escapeHtml(player)}')">
+                                <div class="mvp-player-avatar">${avatar}</div>
+                                <div class="mvp-player-name">${escapeHtml(player)}</div>
+                                <div class="mvp-player-votes">${voteCount} <i class="fas fa-star" style="color: var(--gold);"></i></div>
+                            </div>
+                        `;
+                    }).join('');
+                    document.getElementById('mvpSubmitBtn').style.display = 'block';
+                }
+                
+                selectedMvpPlayer = null;
+                openModal('mvpModal');
+            } catch (error) {
+                console.error('Ошибка в openMvpModal:', error);
+                alert('Произошла ошибка при открытии окна MVP');
+            }
+        }
+
+        function selectMvpPlayer(element, playerName) {
+            document.querySelectorAll('.mvp-player-item').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedMvpPlayer = playerName;
+        }
+
+        function submitMvpVote() {
+            if (!selectedMvpPlayer) { alert('Выберите игрока!'); return; }
+            
+            const userName = localStorage.getItem(STORAGE_KEYS.chatUserName);
+            if (!userName) { alert('Сначала войдите в чат!'); return; }
+            
+            let votingData = JSON.parse(localStorage.getItem(STORAGE_KEYS.mvpVoting) || 'null');
+            const matchDateStr = localStorage.getItem(STORAGE_KEYS.matchDate) || '2026-06-15';
+            
+            if (!votingData || votingData.matchDate !== matchDateStr) {
+                votingData = {
+                    matchDate: matchDateStr,
+                    votes: {},
+                    votedBy: [],
+                    userVotes: {}
+                };
+            }
+            
+            if (votingData.votedBy.includes(userName)) {
+                alert('Вы уже проголосовали!');
+                return;
+            }
+            
+            votingData.votes[selectedMvpPlayer] = (votingData.votes[selectedMvpPlayer] || 0) + 1;
+            votingData.votedBy.push(userName);
+            votingData.userVotes[userName] = selectedMvpPlayer;
+            
+            localStorage.setItem(STORAGE_KEYS.mvpVoting, JSON.stringify(votingData));
+            
+            updateCurrentMvp(votingData);
+            
+            closeModal('mvpModal');
+            updateMvpLobbyBadge();
+            alert(`Вы проголосовали за ${selectedMvpPlayer}!`);
+        }
+
+        function updateCurrentMvp(votingData) {
+            if (!votingData || !votingData.votes) return;
+            
+            let maxVotes = 0;
+            let winner = null;
+            for (const [player, votes] of Object.entries(votingData.votes)) {
+                if (votes > maxVotes) {
+                    maxVotes = votes;
+                    winner = player;
+                }
+            }
+            
+            if (!winner) return;
+            
+            let mvpHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.mvpHistory) || '[]');
+            let currentMvp = JSON.parse(localStorage.getItem(STORAGE_KEYS.currentMvp) || 'null');
+            
+            let streak = 1;
+            if (currentMvp && currentMvp.player === winner) {
+                streak = currentMvp.streak + 1;
+            } else {
+                streak = 1;
+            }
+            
+            const newMvp = {
+                player: winner,
+                streak: streak,
+                matchDate: votingData.matchDate,
+                votes: maxVotes
+            };
+            
+            localStorage.setItem(STORAGE_KEYS.currentMvp, JSON.stringify(newMvp));
+            
+            const existingIndex = mvpHistory.findIndex(h => h.matchDate === votingData.matchDate);
+            if (existingIndex !== -1) {
+                mvpHistory[existingIndex] = newMvp;
+            } else {
+                mvpHistory.push(newMvp);
+            }
+            localStorage.setItem(STORAGE_KEYS.mvpHistory, JSON.stringify(mvpHistory));
+        }
+
+        function updateMvpLobbyBadge() {
+            const currentMvp = JSON.parse(localStorage.getItem(STORAGE_KEYS.currentMvp) || 'null');
+            const badge = document.getElementById('mvpLobbyBadge');
+            
+            if (currentMvp) {
+                badge.classList.add('show');
+                document.getElementById('mvpLobbyName').textContent = currentMvp.player;
+                document.getElementById('mvpStarNumber').textContent = currentMvp.streak;
+            } else {
+                badge.classList.remove('show');
+            }
+        }
+
+        /* ============================================
+           ЧАТ: СООБЩЕНИЯ
+           ============================================ */
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            if (chatActionState && chatActionState.type === 'edit') {
+                const messages = JSON.parse(localStorage.getItem(STORAGE_KEYS.chatMessages) || '[]');
+                const msgIndex = messages.findIndex(m => m.id === chatActionState.message.id);
+                if (msgIndex !== -1) {
+                    messages[msgIndex].text = text;
+                    messages[msgIndex].isEdited = true;
+                    localStorage.setItem(STORAGE_KEYS.chatMessages, JSON.stringify(messages));
+                    input.value = '';
+                    cancelEdit();
+                    loadChatMessages();
+                    return;
+                }
+            }
+            
+            const userName = localStorage.getItem(STORAGE_KEYS.chatUserName) || 'Гость';
+            const userAvatar = localStorage.getItem(STORAGE_KEYS.chatUserAvatar) || '👤';
+            const isAdmin = localStorage.getItem(STORAGE_KEYS.isAdmin) === 'true';
+            const timestamp = new Date().toLocaleString('ru-RU');
+            
+            const message = {
+                id: generateMessageId(),
+                author: userName,
+                authorAvatar: userAvatar,
+                text: text,
+                time: timestamp,
+                isAdmin: isAdmin,
+                isEdited: false,
+                replyTo: null
+            };
+            
+            if (chatActionState && chatActionState.type === 'reply') {
+                const originalMsg = chatActionState.message;
+                message.replyTo = {
+                    id: originalMsg.id,
+                    author: originalMsg.author,
+                    text: originalMsg.text,
+                    isDeleted: false
+                };
+            }
+            
+            let messages = JSON.parse(localStorage.getItem(STORAGE_KEYS.chatMessages) || '[]');
+            messages.push(message);
+            localStorage.setItem(STORAGE_KEYS.chatMessages, JSON.stringify(messages));
+            
+            input.value = '';
+            cancelReply();
+            cancelEdit();
+            loadChatMessages();
+        }
+
+        function replyToMessage(messageId) {
+            const messages = JSON.parse(localStorage.getItem(STORAGE_KEYS.chatMessages) || '[]');
+            const message = messages.find(m => m.id === messageId);
+            if (!message) return;
+            cancelEdit();
+            chatActionState = { type: 'reply', message: message };
+            document.getElementById('replyPreviewAuthor').textContent = message.author;
+            document.getElementById('replyPreviewText').textContent = message.text;
+            document.getElementById('replyPreview').classList.add('show');
+            document.getElementById('chatInput').focus();
+        }
+
+        function cancelReply() {
+            chatActionState = null;
+            document.getElementById('replyPreview').classList.remove('show');
+        }
+
+        function editMessage(messageId) {
+            const messages = JSON.parse(localStorage.getItem(STORAGE_KEYS.chatMessages) || '[]');
+            const message = messages.find(m => m.id === messageId);
+            if (!message) return;
+            const currentUserName = localStorage.getItem(STORAGE_KEYS.chatUserName);
+            if (message.author !== currentUserName) { alert('Можно редактировать только свои сообщения!'); return; }
+            cancelReply();
+            chatActionState = { type: 'edit', message: message };
+            const input = document.getElementById('chatInput');
+            input.value = message.text;
+            input.focus();
+            document.getElementById('editPreview').classList.add('show');
+        }
+
+        function cancelEdit() {
+            if (chatActionState && chatActionState.type === 'edit') {
+                document.getElementById('chatInput').value = '';
+            }
+            chatActionState = null;
+            document.getElementById('editPreview').classList.remove('show');
+        }
+
+        function deleteMessage(messageId) {
+            const messages = JSON.parse(localStorage.getItem(STORAGE_KEYS.chatMessages) || '[]');
+            const message = messages.find(m => m.id === messageId);
+            if (!message) return;
+            const currentUserName = localStorage.getItem(STORAGE_KEYS.chatUserName);
+            const isAdmin = localStorage.getItem(STORAGE_KEYS.isAdmin) === 'true';
+            if (message.author !== currentUserName && !isAdmin) { alert('Нельзя удалить это сообщение!'); return; }
+            if (!confirm('Удалить сообщение?')) return;
+            
+            const updatedMessages = messages.filter(m => m.id !== messageId);
+            updatedMessages.forEach(m => {
+                if (m.replyTo && m.replyTo.id === messageId) {
+                    m.replyTo.isDeleted = true;
+                    m.replyTo.text = 'Сообщение удалено';
+                    m.replyTo.author = 'Неизвестный';
+                }
+            });
+            localStorage.setItem(STORAGE_KEYS.chatMessages, JSON.stringify(updatedMessages));
+            if (chatActionState && chatActionState.message && chatActionState.message.id === messageId) cancelEdit();
+            loadChatMessages();
+        }
+
+        function scrollToMessage(messageId) {
+            const element = document.querySelector(`[data-message-id="${messageId}"]`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.style.transition = 'background 0.3s ease';
+                element.style.background = 'rgba(212, 175, 55, 0.3)';
+                setTimeout(() => { element.style.background = ''; }, 1500);
+            }
+        }
+
+        function loadChatMessages() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messages = JSON.parse(localStorage.getItem(STORAGE_KEYS.chatMessages) || '[]');
+            const currentUserName = localStorage.getItem(STORAGE_KEYS.chatUserName);
+            const isAdmin = localStorage.getItem(STORAGE_KEYS.isAdmin) === 'true';
+            const currentMvp = JSON.parse(localStorage.getItem(STORAGE_KEYS.currentMvp) || 'null');
+            
+            if (messages.length === 0) {
+                messagesContainer.innerHTML = `
+                    <div style="text-align: center; color: #888; padding: 40px 20px;">
+                        <i class="fas fa-comment-slash" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.3;"></i>
+                        <p>Пока нет сообщений. Будьте первым!</p>
+                    </div>`;
+                return;
+            }
+            
+            messagesContainer.innerHTML = messages.map(msg => {
+                const isOwnMessage = msg.author === currentUserName;
+                const canEdit = isOwnMessage;
+                const canDelete = isOwnMessage || isAdmin;
+                const isMvp = currentMvp && msg.author === currentMvp.player;
+                
+                let replyBlock = '';
+                if (msg.replyTo) {
+                    const isReplyDeleted = msg.replyTo.isDeleted;
+                    replyBlock = `
+                        <div class="message-reply ${isReplyDeleted ? 'deleted' : ''}" 
+                             onclick="${isReplyDeleted ? '' : `scrollToMessage('${msg.replyTo.id}')`}"
+                             title="${isReplyDeleted ? 'Оригинал удалён' : 'Перейти к сообщению'}">
+                            <div class="message-reply-author">
+                                <i class="fas fa-reply"></i>${escapeHtml(msg.replyTo.author)}
+                            </div>
+                            <div class="message-reply-text">${escapeHtml(msg.replyTo.text)}</div>
+                        </div>`;
+                }
+                
+                let actionsBlock = `
+                    <div class="message-actions">
+                        <button class="action-btn" onclick="replyToMessage('${msg.id}')" title="Ответить">
+                            <i class="fas fa-reply"></i>
+                        </button>
+                        ${canEdit ? `<button class="action-btn" onclick="editMessage('${msg.id}')" title="Редактировать"><i class="fas fa-edit"></i></button>` : ''}
+                        ${canDelete ? `<button class="action-btn delete" onclick="deleteMessage('${msg.id}')" title="Удалить"><i class="fas fa-trash"></i></button>` : ''}
+                    </div>`;
+                
+                const editedMark = msg.isEdited ? '<span class="message-edited">(изменено)</span>' : '';
+                const avatar = msg.authorAvatar || '👤';
+                
+                const authorNameHtml = isMvp 
+                    ? `<span class="mvp-name"><i class="fas fa-crown mvp-crown"></i> ${escapeHtml(msg.author)}</span>`
+                    : `${msg.isAdmin ? '<i class="fas fa-crown"></i>' : ''} ${escapeHtml(msg.author)}`;
+                
+                return `
+                    <div class="chat-message ${msg.isAdmin ? 'admin' : ''}" data-message-id="${msg.id}">
+                        <div class="message-avatar">${avatar}</div>
+                        <div class="message-content">
+                            ${replyBlock}
+                            <div class="message-author">${authorNameHtml}</div>
+                            <div class="message-text">${escapeHtml(msg.text)}</div>
+                            <div class="message-footer">
+                                <div class="message-time">${msg.time} ${editedMark}</div>
+                                ${actionsBlock}
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+            
+            scrollChatToBottom();
+        }
+
+        function scrollChatToBottom() {
+            const c = document.getElementById('chatMessages');
+            c.scrollTop = c.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /* ============================================
+           УТИЛИТЫ
+           ============================================ */
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) e.target.classList.remove('show');
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const openModalEl = document.querySelector('.modal.show');
+                if (openModalEl) { openModalEl.classList.remove('show'); return; }
+                if (chatActionState) { cancelReply(); cancelEdit(); return; }
+                closeSidebar();
+            }
+        });
+
+        setInterval(() => {
+            updateMvpButtonState();
+        }, 60000);
+
+        /* ============================================
+           ИНСТРУМЕНТЫ РАЗРАБОТЧИКА
+           ============================================ */
+        window.Srunington = {
+            getRemainingCodes: function() {
+                const codes = JSON.parse(localStorage.getItem(STORAGE_KEYS.activeCodes) || '[]');
+                console.log('%c🔑 Оставшиеся коды (' + codes.length + '):', 'color: #D4AF37; font-weight: bold;');
+                codes.forEach((code, i) => console.log(`  ${i + 1}. ${code}`));
+                return codes;
+            },
+            resetCodes: function() {
+                if (confirm('⚠️ Сбросить ВСЕ коды?')) {
+                    localStorage.setItem(STORAGE_KEYS.activeCodes, JSON.stringify(INITIAL_ADMIN_CODES));
+                    localStorage.setItem(STORAGE_KEYS.usedCodes, JSON.stringify([]));
+                    console.log('%c✅ Коды сброшены!', 'color: #27ae60; font-weight: bold;');
+                    return true;
+                }
+                return false;
+            },
+            resetAll: function() {
+                if (confirm('⚠️ ПОЛНЫЙ СБРОС?')) {
+                    Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
+                    localStorage.removeItem('srunington_registrationData');
+                    console.log('%c🗑 Всё удалено. Перезагрузите страницу.', 'color: #c0392b; font-weight: bold;');
+                    return true;
+                }
+                return false;
+            },
+            removeAdmin: function() {
+                localStorage.removeItem(STORAGE_KEYS.isAdmin);
+                console.log('%c👤 Права сняты.', 'color: #D4AF37;');
+                return true;
+            },
+            getMvpHistory: function() {
+                const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.mvpHistory) || '[]');
+                console.log('%c🏆 История MVP:', 'color: #D4AF37; font-weight: bold;');
+                console.table(history);
+                return history;
+            },
+            getCurrentMvp: function() {
+                const mvp = JSON.parse(localStorage.getItem(STORAGE_KEYS.currentMvp) || 'null');
+                console.log('%c⭐ Текущий MVP:', 'color: #D4AF37; font-weight: bold;');
+                console.log(mvp);
+                return mvp;
+            },
+            getRegisteredPlayers: function() {
+                const players = JSON.parse(localStorage.getItem(STORAGE_KEYS.registeredPlayers) || '[]');
+                console.log('%c👥 Зарегистрированные игроки:', 'color: #D4AF37; font-weight: bold;');
+                console.log(players);
+                return players;
+            }
+        };
+    </script>
+
+</body>
+</html>
